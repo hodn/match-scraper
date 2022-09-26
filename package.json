@@ -1,0 +1,18 @@
+{
+  "name": "psmf-cal",
+  "version": "1.0.0",
+  "description": "Scrapes match info and dates into ical format.",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hoang Doan",
+  "license": "ISC",
+  "dependencies": {
+    "aws-xray-sdk": "^3.3.7",
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
+    "cheerio-tableparser": "^1.0.1",
+    "ical-generator": "^3.5.1"
+  }
+}
