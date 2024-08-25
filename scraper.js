@@ -1,5 +1,4 @@
-exports.handler = async function (event, context) {
-
+async function start (params) {
     const axios = require('axios');
     const cheerio = require('cheerio');
     const cheerioTableparser = require('cheerio-tableparser');
@@ -7,10 +6,27 @@ exports.handler = async function (event, context) {
     const path = require('path');
     const icalGenerator = require(path.resolve(__dirname, "./icalGenerator.js"));
 
-    const url = event.queryStringParameters.teamUrl;
+    const url = "https://www.psmf.cz/souteze/2024-hanspaulska-liga-podzim/5-g/tymy/team-bambus/";
     
     try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+            headers: {
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                "accept-language": "en-GB,en;q=0.9,cs-CZ;q=0.8,cs;q=0.7,en-US;q=0.6",
+                "cache-control": "max-age=0",
+                "sec-fetch-dest": "document",
+                "sec-fetch-mode": "navigate",
+                "sec-fetch-site": "same-origin",
+                "sec-fetch-user": "?1",
+                "upgrade-insecure-requests": "1",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            },
+            referrer: url,
+            referrerPolicy: "strict-origin-when-cross-origin",
+            method: "GET",
+            mode: "cors",
+            credentials: "include"
+        });
         const $ = cheerio.load(response.data);
             cheerioTableparser($)
 
@@ -87,5 +103,6 @@ exports.handler = async function (event, context) {
         }
     }
     
+} 
 
-}
+start()
