@@ -7,7 +7,7 @@ async function start() {
     const path = require('path');
     const icalGenerator = require(path.resolve(__dirname, "./icalGenerator.js"));
 
-    const url = "https://www.psmf.cz/souteze/2024-hanspaulska-liga-podzim/5-g/tymy/team-bambus/";
+    const url = "https://www.psmf.cz/souteze/2024-futsal-podzim/i-trida-a/tymy/sokol-krhanice-tj/";
     const includeRefSessions = false;
 
     try {
@@ -96,9 +96,6 @@ function parseEvents(parsedData, isRefType) {
         pitchLinks.push('https://www.psmf.cz' + pitchLink);
 
     });
-
-    // Clearing out empty values
-    teamNames = teamNames.filter(n => n);
 
     // Connecting the data together
     for (let index = 0; index < dates.length; index++) {

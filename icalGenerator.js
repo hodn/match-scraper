@@ -5,8 +5,16 @@ module.exports = function icalGenerator(url, events) {
     const calendar = ical({ name: 'PSMF zapasy' });
     calendar.timezone('Europe/Prague');
 
+    function hasMissingEventData(obj) {
+        return Object.values(obj).some(value => value === undefined);
+      }
+
     for (let index = 0; index < events.length; index++) {
         let selected = events[index];
+
+        if (hasMissingEventData(selected)) {
+            continue;
+        }
 
         let date = selected.date.split('.');
         let time = selected.time.split(':');
