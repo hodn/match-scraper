@@ -12,6 +12,7 @@ module.exports = function icalGenerator(url, events) {
     for (let index = 0; index < events.length; index++) {
         let selected = events[index];
 
+        // If the line has missing data (time, date, round, team names, etc.) then don't add it to the .ics file
         if (hasMissingEventData(selected)) {
             continue;
         }
@@ -20,7 +21,7 @@ module.exports = function icalGenerator(url, events) {
         let time = selected.time.split(':');
         const startTime = new Date('20' + date[2], date[1] - 1, date[0], time[0], time[1]);
         const endTime = new Date();
-        endTime.setTime(startTime.getTime() + 65 * 60 * 1000);
+        endTime.setTime(startTime.getTime() + 65 * 60 * 1000); // 30 + 30 minutes game, 5 minute break
 
         
         calendar.createEvent({
