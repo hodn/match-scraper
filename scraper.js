@@ -7,8 +7,9 @@ async function start() {
     const path = require('path');
     const icalGenerator = require(path.resolve(__dirname, "./icalGenerator.js"));
 
-    const url = "https://www.psmf.cz/souteze/2024-futsal-podzim/i-trida-a/tymy/kanalpucers-69/";
-    const includeRefSessions = false;
+    const url = "https://www.psmf.cz/souteze/2025-hanspaulska-liga-jaro/5-f/tymy/team-bambus/";
+    const includeMatches = true;
+    const includeReferees = true;
 
     try {
         const response = await axios.get(url, {
@@ -32,11 +33,16 @@ async function start() {
         const $ = cheerio.load(response.data);
         cheerioTableparser($)
 
-        // Getting match table and parsing into table
-        const events = parseEvents($("table.component__table.has-wrapper.games-new-table").parsetable(), false);
+        let events = [];
 
-        // OPTIONAL: Getting refereeing table and parsing into table 
-        if (includeRefSessions) {
+        // Getting match table and parsing into table
+        if (includeMatches) {
+            const matches = parseEvents($("table.component__table.has-wrapper.games-new-table").parsetable(), false);
+            events.push(...matches)
+        }
+
+        // Getting refereeing table and parsing into table 
+        if (includeReferees) {
             const refs = parseEvents($("table.component__table.has-wrapper.referees-table").parsetable(), true);
             events.push(...refs)
         }
@@ -59,13 +65,13 @@ async function start() {
 
 }
 
-function parseEvents(parsedData, isRefType) {
+function parseEvents(parsedData, isReferee) {
 
     let dates = parsedData[0].slice(1);
     let times = parsedData[1].slice(1);
     let pitches = parsedData[2].slice(1);
     let teams = parsedData[3].slice(1);
-    let rounds = isRefType ? [] : parsedData[4].slice(1);
+    let rounds = isReferee ? [] : parsedData[4].slice(1);
     let teamNames = [];
     let teamColors = [];
     let pitchLinks = [];
@@ -77,7 +83,7 @@ function parseEvents(parsedData, isRefType) {
     teams.forEach(team => {
         const $ = cheerio.load(team);
         let names = $('a');
-        let colors = isRefType ? $('a.component__table-shirt').toArray() : $('a.component__table-shirt.dress-color-action').toArray();
+        let colors = isReferee ? $('a.component__table-shirt').toArray() : $('a.component__table-shirt.dress-color-action').toArray();
 
         $(colors).each(function (index, value) {
             teamColors.push($(this).attr('title'))
@@ -110,9 +116,9 @@ function parseEvents(parsedData, isRefType) {
             awayColors: teamColors[index * 2 + 1],
             date: dates[index].split(';')[1],
             time: times[index],
-            round: isRefType ? "--." : rounds[index],
+            round: isReferee ? "--." : rounds[index],
             pitch: pitchLinks[index],
-            isRefType
+            isReferee
         }
 
         events.push(event);

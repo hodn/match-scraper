@@ -27,7 +27,7 @@ module.exports = function icalGenerator(url, events) {
         calendar.createEvent({
             start: startTime,
             end: endTime,
-            summary: selected.isRefType ? `Pískání: ${selected.homeTeam} - ${selected.awayTeam}` : `${selected.homeTeam} - ${selected.awayTeam}`,
+            summary: selected.isReferee ? `Pískání: ${selected.homeTeam} - ${selected.awayTeam}` : `${selected.homeTeam} - ${selected.awayTeam}`,
             description: {
                 plain: `${selected.homeTeam}: ${selected.homeColors} \n${selected.awayTeam}: ${selected.awayColors} \n${selected.round} kolo \nHřiště: ${selected.pitch} \nRozpis: ${url}`,
                 html: `${selected.homeTeam}: ${selected.homeColors} <br/> ${selected.awayTeam}: ${selected.awayColors} <br/> ${selected.round} kolo <br/> Hřiště: ${selected.pitch} <br/> Rozpis: $url`
